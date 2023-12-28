@@ -29,3 +29,42 @@ prop.table(tab2)
 prop.table(tab2, 1)
 
 prop.table(tab2, 2)
+
+func.1 = function (x, y, dig = 3) {
+  
+  lvl.x = levels(factor(x))
+  result = rep(NA, length(lvl.x))
+  
+  for (i in 1:length(lvl.x)) {
+    m = mean(y[x==lvl.x[i]], na.rm = TRUE)
+    s = sd(y[x==lvl.x[i]], na.rm = TRUE)
+    result[i] = paste0(formatC(m, digits = dig, format = "f"), "±", formatC(s, digits = dig, format = "f"))
+  }
+  
+  result
+  
+}
+
+func.1(x = dat[,"Disease"], y = dat[,"eGFR"])
+
+func.1(x = dat[,"Education"], y = dat[,"SBP"], dig = 1)
+
+func.2 = function (x, y, dig = 3) {
+  
+  lvl.x = levels(factor(x))
+  result = rep(NA, length(lvl.x))
+  
+  for (i in 1:length(lvl.x)) {
+    m = median(y[x==lvl.x[i]], na.rm = TRUE)
+    q.25 = quantile(y[x==lvl.x[i]], 0.25, na.rm = TRUE)
+    q.75 = quantile(y[x==lvl.x[i]], 0.75, na.rm = TRUE)
+    result[i] = paste0(formatC(m, digits = dig, format = "f"), "(", formatC(q.25, digits = dig, format = "f"), "-", formatC(q.75, digits = dig, format = "f"), ")")
+  }
+  
+  result
+  
+}
+
+func.2(x = dat[,"Disease"], y = dat[,"eGFR"])
+
+func.2(x = dat[,"Education"], y = dat[,"SBP"], dig = 1)
