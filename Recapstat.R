@@ -68,3 +68,28 @@ func.2 = function (x, y, dig = 3) {
 func.2(x = dat[,"Disease"], y = dat[,"eGFR"])
 
 func.2(x = dat[,"Education"], y = dat[,"SBP"], dig = 1)
+
+pred_func = function (SBP = NA, DBP = NA) {
+  
+  if (is.na(SBP) & is.na(DBP)) {stop('需要至少輸入一個數值')} else {
+    
+    var_name = c('SBP', 'DBP')
+    var_vec = c(1, SBP, DBP)
+    
+    var_name = var_name[!is.na(var_vec)[-1]]
+    var_vec = var_vec[!is.na(var_vec)]
+    
+    model = lm(dat[,"eGFR"] ~ ., data = dat[,var_name,drop=FALSE])
+    
+    result = model$coefficients %*% var_vec
+    result
+    
+  }
+  
+}
+
+pred_func(SBP = 100)
+
+pred_func(DBP = 100)
+
+pred_func(SBP = 100, DBP = 100)
