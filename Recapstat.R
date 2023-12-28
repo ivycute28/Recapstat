@@ -93,3 +93,32 @@ pred_func(SBP = 100)
 pred_func(DBP = 100)
 
 pred_func(SBP = 100, DBP = 100)
+
+x = c(0, 1, 2, 1, NA, 2)
+coding_x = matrix(c(0, 1, 0, 1, NA, 0,
+                    0, 0, 1, 0, NA, 1), nrow = 6, ncol = 2)
+coding_x
+
+one_hot_coding = function (x) {
+  
+  coding_x = model.matrix(~as.factor(x))
+  new_index = 1:length(x)
+  new_index[is.na(x)] = NA
+  new_index[!is.na(new_index)] = 1:sum(!is.na(x))
+  coding_x = coding_x[new_index,-1]
+  rownames(coding_x) = 1:nrow(coding_x)
+  coding_x
+  
+}
+
+x = c(0, 1, 2, 1, NA, 2)
+one_hot_coding(x)
+
+coding_Income = one_hot_coding(dat[,"Income"])
+coding_Education = one_hot_coding(dat[,"Education"])
+
+dat1 = cbind(dat, coding_Income, coding_Education)
+
+lm(dat[,"eGFR"] ~ ., data = dat1[,c(7:8, 11:14)])
+
+lm(dat[,"eGFR"] ~ dat[,"SBP"] + dat[,"DBP"] + factor(dat[,"Income"]) + factor(dat[,"Education"]))
